@@ -1,0 +1,14 @@
+<h2>Your Wishlist</h2>
+<% if @wishlists.empty? %>
+	<p>No items found.</p>
+<% else %>
+	<ol>
+		<% @wishlists.each do |wishlist| %>
+		<li>
+			<%= products.wishlist.product_id %>
+		</li>
+		<% end %>
+	</ol>
+<% end %>
+
+<%= link_to "Add to wishlist", products_path %>

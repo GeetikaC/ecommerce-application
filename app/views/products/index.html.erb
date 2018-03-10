@@ -1,0 +1,68 @@
+<p id="notice"><%= notice %></p>
+<div class="row">
+  <div class="col-md-11">
+    <h2>Listing Products(<%= @products.length %>)</h2>
+  </div>
+  <div class="col-md-1">
+    <!-- Button trigger modal -->
+    <% if (user_signed_in?) && (can? :create, Product.new) %>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newProduct">
+        Add Product
+      </button>
+    <% end %>
+    
+
+    <!-- Modal -->
+    <div class="modal fade" id="newProduct" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add a new product:</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <%= render 'form', product: @product %>
+          </div>
+        </div>
+      </div>
+    </div>          
+  </div>
+</div>
+
+
+<div class="row" id="productList">
+  <% Product.all.each do |product| %>
+    <div class="col-md-3">
+      <div class="card">
+        <img class="card-img-top" src="<%= product.feature_image_url %>">
+        <div class="card-body">
+          <h5 class="card-title"><%= link_to product.name, product_path(product.id) %></h5>
+          <p class="card-text"><%= product.description.truncate(200) %></p>
+          <p class="card-text"><%= product.price %></p>
+          <%= link_to "Add to Cart", product, class: "btn btn-primary" %>
+          <% if user_signed_in? %>
+            <%= form_for CartLineItem.new do |f| %>
+              <label>Quantity </label>
+              <%= f.select :quantity, (1..10).to_a %> <br/>
+              <%= f.hidden_field :product_id, value: @product.id %>
+              <%= f.submit 'Add' %>
+            <% end %>
+          <% else %>
+            <p> You need to be logged in to add this product to your cart. </p>
+          <% end %>
+        </div>
+        <div class="card-footer">
+          <small class="text-muted">
+            Found in: <%= Category.find(product.category_id).name %>
+          </small>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+
+<!-- 
+<%= link_to 'New product', new_product_path %> -->

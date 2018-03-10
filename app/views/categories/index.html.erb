@@ -1,0 +1,20 @@
+<div class="row">
+
+	<!-- Blog Entries Column -->
+	<div class="col-md-8">
+
+	  <h2 class="my-4">All Categories
+	    <small><%= @categories.length %></small>
+	  </h2>
+
+	  <!-- Blog Post -->
+	  <% @categories.each do |category| %>
+	  <div class="card mb-5">
+	    <div class="card-body">
+	      <h2 class="card-title"><%= link_to category.name, category_path(category.id) %>(<%= category.products.count %>)</h2>
+	    </div>
+	  </div>
+	  <% end %>
+</div>
+<br/>
+<%= link_to "Add Category", new_category_path %>
